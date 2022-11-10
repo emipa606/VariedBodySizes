@@ -69,6 +69,9 @@ public static class VEF_DrawSettings_TryGetNewMeshPatch
             return;
         }
 
-        mesh = Main.GetPawnMesh(Main.CurrentComponent.GetVariedBodySize(pawn), pawn.Rotation.AsInt == 3);
+        if (pawn.RaceProps != null && pawn.RaceProps.Humanlike)
+        {
+            mesh = Main.GetPawnMesh(Main.CurrentComponent.GetVariedBodySize(pawn), pawn.Rotation.AsInt == 3);
+        }
     }
 }
