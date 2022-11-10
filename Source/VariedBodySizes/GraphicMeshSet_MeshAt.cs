@@ -29,8 +29,7 @@ public static class GraphicMeshSet_MeshAt
 [HarmonyPatch]
 public static class VEF_DrawSettings_TryGetNewMeshPatch
 {
-    private static readonly string[] VEFMethods = new[]
-    {
+    private static readonly string[] VEFMethods = {
         "VFECore.Patch_PawnRenderer_DrawPawnBody_Transpiler:ModifyMesh",
         "VFECore.Patch_DrawHeadHair_DrawApparel_Transpiler:TryModifyMeshRef",
         "VFECore.Harmony_PawnRenderer_DrawBodyApparel:ModifyShellMesh",
@@ -42,24 +41,19 @@ public static class VEF_DrawSettings_TryGetNewMeshPatch
         foreach (var methodPath in VEFMethods)
         {
             var targetMethod = AccessTools.Method(methodPath);
-            if (targetMethod == null)
-            {
-                Log.Warning("VEF not found");
-                return false;
-            }
+            if (targetMethod == null) continue;
+            return true;
         }
 
-        return true;
+        return false;
     }
     public static IEnumerable<MethodBase> TargetMethods()
     {
         foreach (var methodPath in VEFMethods)
         {
             var targetMethod = AccessTools.Method(methodPath);
-            if (targetMethod == null)
-                Log.Warning("targetMethod not found");
-            else
-                yield return targetMethod;
+            if (targetMethod == null) continue;
+            yield return targetMethod;
         }
     }
 
