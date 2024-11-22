@@ -178,7 +178,7 @@ public static partial class HarmonyPatches
 
             if (node.apparel is not null)
             {
-                var graphic = node.graphic;
+                _ = node.graphic;
 
                 // If it doesn't match we won't have a rotting graphic anyway
                 if (!ProcessField(originalGearSizes[pawn], node.apparel, node.graphic, pawnDrawSize,
@@ -193,7 +193,7 @@ public static partial class HarmonyPatches
 
             if (node.hediff is not null)
             {
-                var graphic = node.graphic;
+                _ = node.graphic;
 
                 // If it doesn't match we won't have a rotting graphic anyway
                 if (!ProcessField(originalHediffSizes[pawn], node.hediff, node.graphic, pawnDrawSize,
@@ -208,7 +208,7 @@ public static partial class HarmonyPatches
 
             if (node.gene is not null)
             {
-                var graphic = node.graphic;
+                _ = node.graphic;
 
                 // If it doesn't match we won't have a rotting graphic anyway
                 if (!ProcessField(originalGeneSizes[pawn], node.gene, node.graphic, pawnDrawSize,
@@ -219,12 +219,11 @@ public static partial class HarmonyPatches
 
                 // Pop back and continue
                 node.graphic = scaledGraphic;
-                ;
             }
 
             if (node.trait is not null)
             {
-                var graphic = node.graphic;
+                _ = node.graphic;
 
                 // If it doesn't match we won't have a rotting graphic anyway
                 if (!ProcessField(originalTraitSizes[pawn], node.trait, node.graphic, pawnDrawSize,

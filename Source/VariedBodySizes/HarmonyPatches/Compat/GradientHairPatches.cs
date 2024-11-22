@@ -28,7 +28,6 @@ public static partial class HarmonyPatches
             return paths.Length > 1 ? paths[1] : req.maskPath;
         }
 
-        // This patch is basically implementing https://github.com/AUTOMATIC1111/GradientHair/pull/3/files from our side
         public static CodeInstructions Transpiler(CodeInstructions instructions)
         {
             var editor = new CodeMatcher(instructions);
@@ -60,5 +59,8 @@ public static partial class HarmonyPatches
             // Done!
             return editor.InstructionEnumeration();
         }
+
+
+        // This patch is basically implementing https://github.com/AUTOMATIC1111/GradientHair/pull/3/files from our side
     }
 }
