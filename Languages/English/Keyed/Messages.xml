@@ -7,6 +7,8 @@
   <VariedBodySizes.StandardDeviationDivider.Middle>Less random</VariedBodySizes.StandardDeviationDivider.Middle>
   <VariedBodySizes.StandardDeviationDivider.Spread>More random</VariedBodySizes.StandardDeviationDivider.Spread>
   <VariedBodySizes.defaultvariation.label>Default variation</VariedBodySizes.defaultvariation.label>
+  <VariedBodySizes.defaultvariation.label.male>Default variation ♂</VariedBodySizes.defaultvariation.label.male>
+  <VariedBodySizes.defaultvariation.label.female>Default variation ♀</VariedBodySizes.defaultvariation.label.female>
   <VariedBodySizes.variations.label>Custom variations</VariedBodySizes.variations.label>
   <VariedBodySizes.resetgame.dialog>Do you want to reset all generated sizes of all pawns? All pawns will generate a new random size based on the current mod-settings.</VariedBodySizes.resetgame.dialog>
   <VariedBodySizes.no>No</VariedBodySizes.no>
@@ -31,6 +33,8 @@
   <VariedBodySizes.logging.tooltip>Increased logging for debugging</VariedBodySizes.logging.tooltip>
   <VariedBodySizes.ignoreMechs.label>Ignore Mechanoids</VariedBodySizes.ignoreMechs.label>
   <VariedBodySizes.ignoreMechs.tooltip>All mechanoids will use the default size</VariedBodySizes.ignoreMechs.tooltip>
+  <VariedBodySizes.separateFemale.label>Separate gender sliders</VariedBodySizes.separateFemale.label>
+  <VariedBodySizes.separateFemale.tooltip>Adds the option to select separate values per gender</VariedBodySizes.separateFemale.tooltip>
   <VariedBodySizes.ignoreVehicles.label>Ignore Vehicles</VariedBodySizes.ignoreVehicles.label>
   <VariedBodySizes.ignoreVehicles.tooltip>All vehicles will use the default size</VariedBodySizes.ignoreVehicles.tooltip>
   <VariedBodySizes.pawnLocked>Pawnsize locked by global setting</VariedBodySizes.pawnLocked>

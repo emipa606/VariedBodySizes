@@ -8,6 +8,7 @@ namespace VariedBodySizes;
 [StaticConstructorOnStartup]
 public static class Main
 {
+    public const string FemaleSuffix = "_female";
     public static VariedBodySizes_GameComponent CurrentComponent;
     public static readonly bool VehiclesLoaded;
     public static readonly List<ThingDef> AllPawnTypes;
@@ -40,15 +41,28 @@ public static class Main
         }
 
         var sizeRange = VariedBodySizesMod.instance.Settings.DefaultVariation;
-        if (VariedBodySizesMod.instance.Settings.VariedBodySizes.TryGetValue(pawn.def.defName, out var bodySize))
+
+        var pawnDefName = pawn.def.defName;
+        if (VariedBodySizesMod.instance.Settings.SeparateFemale && pawn.gender == Gender.Female)
+        {
+            pawnDefName += FemaleSuffix;
+            sizeRange = VariedBodySizesMod.instance.Settings.DefaultVariationFemale;
+        }
+
+        if (VariedBodySizesMod.instance.Settings.VariedBodySizes.TryGetValue(pawnDefName, out var bodySize))
         {
             sizeRange = bodySize;
         }
 
         var randomStandardNormal = Math.Sqrt(-2.0 * Math.Log(Rand.Value)) * Math.Sin(2.0 * Math.PI * Rand.Value);
         var mean = (sizeRange.min + sizeRange.max) / 2;
-        var standardDeviation = (sizeRange.max - sizeRange.min) /
-                                VariedBodySizesMod.instance.Settings.StandardDeviationDivider;
+        var deviationDivider = VariedBodySizesMod.instance.Settings.StandardDeviationDivider;
+        if (VariedBodySizesMod.instance.Settings.SeparateFemale && pawn.gender == Gender.Female)
+        {
+            deviationDivider = VariedBodySizesMod.instance.Settings.StandardDeviationDividerFemale;
+        }
+
+        var standardDeviation = (sizeRange.max - sizeRange.min) / deviationDivider;
         return (float)Math.Round(mean + (standardDeviation * randomStandardNormal), 2);
     }
 
@@ -76,5 +90,3 @@ public static class Main
         Log.Message($"[VariedBodySizes]: {message}");
     }
 }
-
-// Utility stuff here

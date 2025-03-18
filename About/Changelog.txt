@@ -1,5 +1,9 @@
 # Changelog for VariedBodySizes
 
+1.5.5 - Added setting to have separate sliders per gender
+Used DeepL to update translations for ChineseSimplified, French, German, Russian
+
+
 1.5.4 - Fixed the memory leak, thanks Mootykins!
 
 

@@ -13,7 +13,6 @@ internal class VariedBodySizesMod : Mod
     public static VariedBodySizesMod instance;
 
     private static string currentVersion;
-    private static readonly Vector2 searchSize = new Vector2(200f, 25f);
     private static readonly Vector2 buttonSize = new Vector2(120f, 25f);
     private static readonly Vector2 iconSize = new Vector2(58f, 58f);
     private static string searchText;
@@ -52,22 +51,68 @@ internal class VariedBodySizesMod : Mod
     public override void DoSettingsWindowContents(Rect rect)
     {
         base.DoSettingsWindowContents(rect);
+        var originalAnchor = Text.Anchor;
+        var genderAddon = "";
+        if (Settings.SeparateFemale)
+        {
+            genderAddon = ".male";
+        }
 
         var listing_Standard = new Listing_Standard();
         listing_Standard.Begin(rect);
         listing_Standard.ColumnWidth = rect.width / 2.1f;
-        listing_Standard.Label("VariedBodySizes.defaultvariation.label".Translate());
-        Widgets.FloatRange(listing_Standard.GetRect(30f), "DefaultVariation".GetHashCode(),
+
+        var variationRect = listing_Standard.GetRect(30f);
+        Widgets.FloatRange(variationRect, $"DefaultVariation{genderAddon}".GetHashCode(),
             ref Settings.DefaultVariation,
-            MinimumSize, MaximumSize, null, ToStringStyle.PercentOne);
+            MinimumSize, MaximumSize, $"VariedBodySizes.defaultvariation.label{genderAddon}", ToStringStyle.PercentOne);
+        Text.Anchor = TextAnchor.UpperLeft;
+        Widgets.Label(variationRect, Settings.DefaultVariation.min.ToStringPercent());
+        Text.Anchor = TextAnchor.UpperRight;
+        Widgets.Label(variationRect, Settings.DefaultVariation.max.ToStringPercent());
+
+        if (Settings.SeparateFemale)
+        {
+            genderAddon = ".female";
+            variationRect = listing_Standard.GetRect(30f);
+            Widgets.FloatRange(variationRect, $"DefaultVariation{genderAddon}".GetHashCode(),
+                ref Settings.DefaultVariationFemale,
+                MinimumSize, MaximumSize, $"VariedBodySizes.defaultvariation.label{genderAddon}",
+                ToStringStyle.PercentOne);
+            Text.Anchor = TextAnchor.UpperLeft;
+            Widgets.Label(variationRect, Settings.DefaultVariationFemale.min.ToStringPercent());
+            Text.Anchor = TextAnchor.UpperRight;
+            Widgets.Label(variationRect, Settings.DefaultVariationFemale.max.ToStringPercent());
+        }
+
+        Text.Anchor = originalAnchor;
+
 
         listing_Standard.Gap();
-        var dividerRect = listing_Standard.GetRect(25f);
+        genderAddon = "";
+        if (Settings.SeparateFemale)
+        {
+            genderAddon = " ♂";
+        }
+
+        var dividerRect = listing_Standard.GetRect(30f);
         Settings.StandardDeviationDivider = Widgets.HorizontalSlider(dividerRect,
-            Settings.StandardDeviationDivider, 2f, 20f, false, "VariedBodySizes.StandardDeviationDivider".Translate(),
+            Settings.StandardDeviationDivider, 2f, 20f, false,
+            "VariedBodySizes.StandardDeviationDivider".Translate() + genderAddon,
             "VariedBodySizes.StandardDeviationDivider.Spread".Translate(),
             "VariedBodySizes.StandardDeviationDivider.Middle".Translate());
         TooltipHandler.TipRegion(dividerRect, "VariedBodySizes.StandardDeviationDividerTT".Translate());
+        if (Settings.SeparateFemale)
+        {
+            genderAddon = " ♀";
+            dividerRect = listing_Standard.GetRect(30f);
+            Settings.StandardDeviationDividerFemale = Widgets.HorizontalSlider(dividerRect,
+                Settings.StandardDeviationDividerFemale, 2f, 20f, false,
+                "VariedBodySizes.StandardDeviationDivider".Translate() + genderAddon,
+                "VariedBodySizes.StandardDeviationDivider.Spread".Translate(),
+                "VariedBodySizes.StandardDeviationDivider.Middle".Translate());
+            TooltipHandler.TipRegion(dividerRect, "VariedBodySizes.StandardDeviationDividerTT".Translate());
+        }
 
         if (Current.Game != null && Main.CurrentComponent != null)
         {
@@ -92,26 +137,11 @@ internal class VariedBodySizesMod : Mod
             }
         }
 
-        listing_Standard.Gap();
         listing_Standard.CheckboxLabeled("VariedBodySizes.ignoreMechs.label".Translate(), ref Settings.IgnoreMechs,
             "VariedBodySizes.ignoreMechs.tooltip".Translate());
-        if (Main.VehiclesLoaded)
-        {
-            listing_Standard.CheckboxLabeled("VariedBodySizes.ignoreVehicles.label".Translate(),
-                ref Settings.IgnoreVehicles,
-                "VariedBodySizes.ignoreVehicles.tooltip".Translate());
-        }
-        else
-        {
-            Settings.IgnoreVehicles = false;
-        }
-
-        if (currentVersion != null)
-        {
-            GUI.contentColor = Color.gray;
-            listing_Standard.Label("VariedBodySizes.version.label".Translate(currentVersion));
-            GUI.contentColor = Color.white;
-        }
+        listing_Standard.CheckboxLabeled("VariedBodySizes.separateFemale.label".Translate(),
+            ref Settings.SeparateFemale,
+            "VariedBodySizes.separateFemale.tooltip".Translate());
 
         listing_Standard.NewColumn();
 
@@ -140,6 +170,28 @@ internal class VariedBodySizesMod : Mod
             listing_Standard.CheckboxLabeled("VariedBodySizes.lactating.label".Translate(),
                 ref Settings.AffectLactating,
                 "VariedBodySizes.lactating.tooltip".Translate());
+        }
+        else
+        {
+            Settings.AffectLactating = false;
+        }
+
+        if (Main.VehiclesLoaded)
+        {
+            listing_Standard.CheckboxLabeled("VariedBodySizes.ignoreVehicles.label".Translate(),
+                ref Settings.IgnoreVehicles,
+                "VariedBodySizes.ignoreVehicles.tooltip".Translate());
+        }
+        else
+        {
+            Settings.IgnoreVehicles = false;
+        }
+
+        if (currentVersion != null)
+        {
+            GUI.contentColor = Color.gray;
+            listing_Standard.Label("VariedBodySizes.version.label".Translate(currentVersion));
+            GUI.contentColor = Color.white;
         }
 
         listing_Standard.End();
@@ -200,11 +252,13 @@ internal class VariedBodySizesMod : Mod
 
             var currentValue = Settings.DefaultVariation;
             var originalColor = GUI.contentColor;
-            if (instance.Settings.VariedBodySizes.TryGetValue(pawnType.defName, out var bodySize))
+            var pawnTypeDefName = pawnType.defName;
+
+            if (instance.Settings.VariedBodySizes.TryGetValue(pawnTypeDefName, out var bodySize))
             {
                 if (locked)
                 {
-                    instance.Settings.VariedBodySizes.Remove(pawnType.defName);
+                    instance.Settings.VariedBodySizes.Remove(pawnTypeDefName);
                 }
                 else
                 {
@@ -213,7 +267,13 @@ internal class VariedBodySizesMod : Mod
                 }
             }
 
-            var raceLabel = $"{pawnType.label.CapitalizeFirst()} ({pawnType.defName}) - {modInfo}";
+            genderAddon = "";
+            if (Settings.SeparateFemale && pawnType.race.hasGenders)
+            {
+                genderAddon = "♂ ";
+            }
+
+            var raceLabel = $"{genderAddon}{pawnType.label.CapitalizeFirst()} ({pawnType.defName}) - {modInfo}";
             DrawIcon(pawnType,
                 new Rect(rowRect.position, iconSize));
             var nameRect = new Rect(rowRect.position + new Vector2(iconSize.x, 3f),
@@ -229,19 +289,84 @@ internal class VariedBodySizesMod : Mod
                 continue;
             }
 
-            Widgets.FloatRange(sliderRect, pawnType.defName.GetHashCode(), ref currentValue, MinimumSize, MaximumSize,
+            Widgets.FloatRange(sliderRect, pawnTypeDefName.GetHashCode(), ref currentValue, MinimumSize, MaximumSize,
                 null,
                 ToStringStyle.PercentOne);
             GUI.contentColor = originalColor;
             if (currentValue != Settings.DefaultVariation)
             {
-                instance.Settings.VariedBodySizes[pawnType.defName] = currentValue;
+                Settings.VariedBodySizes[pawnTypeDefName] = currentValue;
                 continue;
             }
 
-            if (instance.Settings.VariedBodySizes.ContainsKey(pawnType.defName))
+            if (Settings.VariedBodySizes.ContainsKey(pawnTypeDefName))
             {
-                instance.Settings.VariedBodySizes.Remove(pawnType.defName);
+                Settings.VariedBodySizes.Remove(pawnTypeDefName);
+            }
+
+            if (!Settings.SeparateFemale || !pawnType.race.hasGenders)
+            {
+                continue;
+            }
+
+            pawnTypeDefName += Main.FemaleSuffix;
+            locked = Settings.IgnoreMechs && pawnType.race.IsMechanoid ||
+                     Settings.IgnoreVehicles && pawnType.thingClass.Name.EndsWith("VehiclePawn");
+
+            modInfo = pawnType.modContentPack?.Name;
+            rowRect = scrollListing.GetRect(60);
+            alternate = !alternate;
+            if (alternate)
+            {
+                Widgets.DrawBoxSolid(rowRect.ExpandedBy(10, 0), alternateBackground);
+            }
+
+            currentValue = Settings.DefaultVariationFemale;
+            originalColor = GUI.contentColor;
+            if (Settings.VariedBodySizes.TryGetValue(pawnTypeDefName, out bodySize))
+            {
+                if (locked)
+                {
+                    Settings.VariedBodySizes.Remove(pawnTypeDefName);
+                }
+                else
+                {
+                    currentValue = bodySize;
+                    GUI.contentColor = Color.green;
+                }
+            }
+
+            genderAddon = "♀ ";
+            raceLabel = $"{genderAddon}{pawnType.label.CapitalizeFirst()} ({pawnType.defName}) - {modInfo}";
+            DrawIcon(pawnType,
+                new Rect(rowRect.position, iconSize));
+            nameRect = new Rect(rowRect.position + new Vector2(iconSize.x, 3f),
+                rowRect.size - new Vector2(iconSize.x, (rowRect.height / 2) + 3f));
+            sliderRect = new Rect(rowRect.position + new Vector2(iconSize.x, rowRect.height / 2),
+                rowRect.size - new Vector2(iconSize.x, (rowRect.height / 2) + 3f));
+
+            Widgets.Label(nameRect, raceLabel);
+
+            if (locked)
+            {
+                Widgets.Label(sliderRect, "VariedBodySizes.pawnLocked".Translate());
+                continue;
+            }
+
+            Widgets.FloatRange(sliderRect, pawnTypeDefName.GetHashCode(), ref currentValue, MinimumSize,
+                MaximumSize,
+                null,
+                ToStringStyle.PercentOne);
+            GUI.contentColor = originalColor;
+            if (currentValue != Settings.DefaultVariationFemale)
+            {
+                Settings.VariedBodySizes[pawnTypeDefName] = currentValue;
+                continue;
+            }
+
+            if (Settings.VariedBodySizes.ContainsKey(pawnTypeDefName))
+            {
+                Settings.VariedBodySizes.Remove(pawnTypeDefName);
             }
         }
 

@@ -37,4 +37,8 @@
   <VariedBodySizes.pawnLocked>通过全局设置锁定棋子大小</VariedBodySizes.pawnLocked>
   <VariedBodySizes.sizeChange>尺寸变化系数</VariedBodySizes.sizeChange>
   <VariedBodySizes.sizeNote>尺寸变化系数 {0}</VariedBodySizes.sizeNote>
+  <VariedBodySizes.defaultvariation.label.male>默认变化 ♂</VariedBodySizes.defaultvariation.label.male>
+  <VariedBodySizes.defaultvariation.label.female>默认变化 ♀</VariedBodySizes.defaultvariation.label.female>
+  <VariedBodySizes.separateFemale.label>独立的性别滑块</VariedBodySizes.separateFemale.label>
+  <VariedBodySizes.separateFemale.tooltip>增加了按性别选择不同数值的选项</VariedBodySizes.separateFemale.tooltip>
 </LanguageData>

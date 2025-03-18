@@ -37,4 +37,8 @@
   <VariedBodySizes.pawnLocked>Taille des pions verrouillée par un réglage global</VariedBodySizes.pawnLocked>
   <VariedBodySizes.sizeChange>Facteur de changement de taille</VariedBodySizes.sizeChange>
   <VariedBodySizes.sizeNote>Facteur de changement de taille {0}</VariedBodySizes.sizeNote>
+  <VariedBodySizes.defaultvariation.label.male>Variation par défaut ♂</VariedBodySizes.defaultvariation.label.male>
+  <VariedBodySizes.defaultvariation.label.female>Variation par défaut ♀</VariedBodySizes.defaultvariation.label.female>
+  <VariedBodySizes.separateFemale.label>Des curseurs distincts pour les hommes et les femmes</VariedBodySizes.separateFemale.label>
+  <VariedBodySizes.separateFemale.tooltip>Ajoute l'option de sélectionner des valeurs distinctes par sexe</VariedBodySizes.separateFemale.tooltip>
 </LanguageData>

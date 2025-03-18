@@ -37,4 +37,8 @@
   <VariedBodySizes.pawnLocked>Pawnsize durch globale Einstellung gesperrt</VariedBodySizes.pawnLocked>
   <VariedBodySizes.sizeChange>Faktor für Größenänderung</VariedBodySizes.sizeChange>
   <VariedBodySizes.sizeNote>Größenänderungsfaktor {0}</VariedBodySizes.sizeNote>
+  <VariedBodySizes.defaultvariation.label.male>Standardvariante ♂</VariedBodySizes.defaultvariation.label.male>
+  <VariedBodySizes.defaultvariation.label.female>Standardvariante ♀</VariedBodySizes.defaultvariation.label.female>
+  <VariedBodySizes.separateFemale.label>Getrennte Schieberegler für die Geschlechter</VariedBodySizes.separateFemale.label>
+  <VariedBodySizes.separateFemale.tooltip>Fügt die Option hinzu, separate Werte pro Geschlecht auszuwählen</VariedBodySizes.separateFemale.tooltip>
 </LanguageData>

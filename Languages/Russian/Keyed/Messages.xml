@@ -37,4 +37,8 @@
   <VariedBodySizes.pawnLocked>Размер пешки блокируется глобальной настройкой</VariedBodySizes.pawnLocked>
   <VariedBodySizes.sizeChange>Коэффициент изменения размера</VariedBodySizes.sizeChange>
   <VariedBodySizes.sizeNote>Коэффициент изменения размеров {0}</VariedBodySizes.sizeNote>
+  <VariedBodySizes.defaultvariation.label.male>Вариация по умолчанию ♂</VariedBodySizes.defaultvariation.label.male>
+  <VariedBodySizes.defaultvariation.label.female>Вариант по умолчанию ♀</VariedBodySizes.defaultvariation.label.female>
+  <VariedBodySizes.separateFemale.label>Ползунки для разделения полов</VariedBodySizes.separateFemale.label>
+  <VariedBodySizes.separateFemale.tooltip>Добавляет возможность выбора отдельных значений для каждого пола</VariedBodySizes.separateFemale.tooltip>
 </LanguageData>
