@@ -15,7 +15,7 @@ public static class Main
 
     static Main()
     {
-        VehiclesLoaded = ModLister.GetActiveModWithIdentifier("SmashPhil.VehicleFramework") != null;
+        VehiclesLoaded = ModLister.GetActiveModWithIdentifier("SmashPhil.VehicleFramework", true) != null;
         AllPawnTypes = DefDatabase<ThingDef>.AllDefsListForReading.Where(def => def.race != null && !def.IsCorpse)
             .OrderBy(def => def.label).ToList();
         HarmonyPatches.ApplyAll(new Harmony("Mlie.VariedBodySizes"));
@@ -30,36 +30,36 @@ public static class Main
 
     public static float GetPawnVariation(Pawn pawn)
     {
-        if (VariedBodySizesMod.instance.Settings.IgnoreMechs && pawn.RaceProps.IsMechanoid)
+        if (VariedBodySizesMod.Instance.Settings.IgnoreMechs && pawn.RaceProps.IsMechanoid)
         {
             return 1f;
         }
 
-        if (VariedBodySizesMod.instance.Settings.IgnoreVehicles && pawn.def.thingClass.Name.EndsWith("VehiclePawn"))
+        if (VariedBodySizesMod.Instance.Settings.IgnoreVehicles && pawn.def.thingClass.Name.EndsWith("VehiclePawn"))
         {
             return 1f;
         }
 
-        var sizeRange = VariedBodySizesMod.instance.Settings.DefaultVariation;
+        var sizeRange = VariedBodySizesMod.Instance.Settings.DefaultVariation;
 
         var pawnDefName = pawn.def.defName;
-        if (VariedBodySizesMod.instance.Settings.SeparateFemale && pawn.gender == Gender.Female)
+        if (VariedBodySizesMod.Instance.Settings.SeparateFemale && pawn.gender == Gender.Female)
         {
             pawnDefName += FemaleSuffix;
-            sizeRange = VariedBodySizesMod.instance.Settings.DefaultVariationFemale;
+            sizeRange = VariedBodySizesMod.Instance.Settings.DefaultVariationFemale;
         }
 
-        if (VariedBodySizesMod.instance.Settings.VariedBodySizes.TryGetValue(pawnDefName, out var bodySize))
+        if (VariedBodySizesMod.Instance.Settings.VariedBodySizes.TryGetValue(pawnDefName, out var bodySize))
         {
             sizeRange = bodySize;
         }
 
         var randomStandardNormal = Math.Sqrt(-2.0 * Math.Log(Rand.Value)) * Math.Sin(2.0 * Math.PI * Rand.Value);
         var mean = (sizeRange.min + sizeRange.max) / 2;
-        var deviationDivider = VariedBodySizesMod.instance.Settings.StandardDeviationDivider;
-        if (VariedBodySizesMod.instance.Settings.SeparateFemale && pawn.gender == Gender.Female)
+        var deviationDivider = VariedBodySizesMod.Instance.Settings.StandardDeviationDivider;
+        if (VariedBodySizesMod.Instance.Settings.SeparateFemale && pawn.gender == Gender.Female)
         {
-            deviationDivider = VariedBodySizesMod.instance.Settings.StandardDeviationDividerFemale;
+            deviationDivider = VariedBodySizesMod.Instance.Settings.StandardDeviationDividerFemale;
         }
 
         var standardDeviation = (sizeRange.max - sizeRange.min) / deviationDivider;
@@ -71,18 +71,18 @@ public static class Main
         if (pawn == null)
         {
             HarmonyPatches.FacialAnimation_GetHeadMeshSetPatch.HeadCache?.Clear();
-            CurrentComponent?.sizeCache?.Clear();
+            CurrentComponent?.SizeCache?.Clear();
             return;
         }
 
         HarmonyPatches.FacialAnimation_GetHeadMeshSetPatch.HeadCache.Remove(pawn);
-        CurrentComponent.sizeCache.Remove(pawn);
+        CurrentComponent.SizeCache.Remove(pawn);
         GlobalTextureAtlasManager.TryMarkPawnFrameSetDirty(pawn);
     }
 
     public static void LogMessage(string message, bool forced = false)
     {
-        if (!forced && !VariedBodySizesMod.instance.Settings.VerboseLogging)
+        if (!forced && !VariedBodySizesMod.Instance.Settings.VerboseLogging)
         {
             return;
         }

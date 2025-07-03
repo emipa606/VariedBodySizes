@@ -8,7 +8,7 @@ public static partial class HarmonyPatches
     {
         public static void Postfix(ref float __result, Pawn attacker, VerbProperties __instance)
         {
-            if (!VariedBodySizesMod.instance.Settings.AffectMeleeDamage)
+            if (!VariedBodySizesMod.Instance.Settings.AffectMeleeDamage)
             {
                 return;
             }
@@ -27,7 +27,7 @@ public static partial class HarmonyPatches
     {
         public static void Postfix(ref float __result, LocalTargetInfo target)
         {
-            if (!VariedBodySizesMod.instance.Settings.AffectMeleeDodgeChance)
+            if (!VariedBodySizesMod.Instance.Settings.AffectMeleeDodgeChance)
             {
                 return;
             }
@@ -41,7 +41,7 @@ public static partial class HarmonyPatches
             var new_result = __result < 0 ? __result * GetScalarForPawn(pawn) : __result / GetScalarForPawn(pawn);
 
             // Only delegate the string building when it's relevant
-            if (VariedBodySizesMod.instance.Settings.VerboseLogging)
+            if (VariedBodySizesMod.Instance.Settings.VerboseLogging)
             {
                 Main.LogMessage(
                     $"Dodge chance for {pawn.LabelShort} modified: {__result * 100}% -> {new_result * 100}%");

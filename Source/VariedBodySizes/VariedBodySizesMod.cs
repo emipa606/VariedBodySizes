@@ -10,14 +10,14 @@ internal class VariedBodySizesMod : Mod
     /// <summary>
     ///     The instance of the settings to be read by the mod
     /// </summary>
-    public static VariedBodySizesMod instance;
+    public static VariedBodySizesMod Instance;
 
     private static string currentVersion;
-    private static readonly Vector2 buttonSize = new Vector2(120f, 25f);
-    private static readonly Vector2 iconSize = new Vector2(58f, 58f);
+    private static readonly Vector2 buttonSize = new(120f, 25f);
+    private static readonly Vector2 iconSize = new(58f, 58f);
     private static string searchText;
     private static Vector2 scrollPosition;
-    private static readonly Color alternateBackground = new Color(0.2f, 0.2f, 0.2f, 0.5f);
+    private static readonly Color alternateBackground = new(0.2f, 0.2f, 0.2f, 0.5f);
 
 
     /// <summary>
@@ -32,7 +32,7 @@ internal class VariedBodySizesMod : Mod
     public VariedBodySizesMod(ModContentPack content)
         : base(content)
     {
-        instance = this;
+        Instance = this;
         searchText = string.Empty;
         currentVersion = VersionFromManifest.GetVersionFromModMetaData(content.ModMetaData);
         Settings = GetSettings<VariedBodySizesModSettings>();
@@ -58,11 +58,11 @@ internal class VariedBodySizesMod : Mod
             genderAddon = ".male";
         }
 
-        var listing_Standard = new Listing_Standard();
-        listing_Standard.Begin(rect);
-        listing_Standard.ColumnWidth = rect.width / 2.1f;
+        var listingStandard = new Listing_Standard();
+        listingStandard.Begin(rect);
+        listingStandard.ColumnWidth = rect.width / 2.1f;
 
-        var variationRect = listing_Standard.GetRect(30f);
+        var variationRect = listingStandard.GetRect(30f);
         Widgets.FloatRange(variationRect, $"DefaultVariation{genderAddon}".GetHashCode(),
             ref Settings.DefaultVariation,
             MinimumSize, MaximumSize, $"VariedBodySizes.defaultvariation.label{genderAddon}", ToStringStyle.PercentOne);
@@ -74,7 +74,7 @@ internal class VariedBodySizesMod : Mod
         if (Settings.SeparateFemale)
         {
             genderAddon = ".female";
-            variationRect = listing_Standard.GetRect(30f);
+            variationRect = listingStandard.GetRect(30f);
             Widgets.FloatRange(variationRect, $"DefaultVariation{genderAddon}".GetHashCode(),
                 ref Settings.DefaultVariationFemale,
                 MinimumSize, MaximumSize, $"VariedBodySizes.defaultvariation.label{genderAddon}",
@@ -88,14 +88,14 @@ internal class VariedBodySizesMod : Mod
         Text.Anchor = originalAnchor;
 
 
-        listing_Standard.Gap();
+        listingStandard.Gap();
         genderAddon = "";
         if (Settings.SeparateFemale)
         {
             genderAddon = " ♂";
         }
 
-        var dividerRect = listing_Standard.GetRect(30f);
+        var dividerRect = listingStandard.GetRect(30f);
         Settings.StandardDeviationDivider = Widgets.HorizontalSlider(dividerRect,
             Settings.StandardDeviationDivider, 2f, 20f, false,
             "VariedBodySizes.StandardDeviationDivider".Translate() + genderAddon,
@@ -105,7 +105,7 @@ internal class VariedBodySizesMod : Mod
         if (Settings.SeparateFemale)
         {
             genderAddon = " ♀";
-            dividerRect = listing_Standard.GetRect(30f);
+            dividerRect = listingStandard.GetRect(30f);
             Settings.StandardDeviationDividerFemale = Widgets.HorizontalSlider(dividerRect,
                 Settings.StandardDeviationDividerFemale, 2f, 20f, false,
                 "VariedBodySizes.StandardDeviationDivider".Translate() + genderAddon,
@@ -116,7 +116,7 @@ internal class VariedBodySizesMod : Mod
 
         if (Current.Game != null && Main.CurrentComponent != null)
         {
-            var resetLabel = listing_Standard.Label("VariedBodySizes.resetgame".Translate());
+            var resetLabel = listingStandard.Label("VariedBodySizes.resetgame".Translate());
             if (Widgets.ButtonText(
                     new Rect(resetLabel.position + new Vector2(resetLabel.width - buttonSize.x, 0),
                         buttonSize),
@@ -137,37 +137,37 @@ internal class VariedBodySizesMod : Mod
             }
         }
 
-        listing_Standard.CheckboxLabeled("VariedBodySizes.ignoreMechs.label".Translate(), ref Settings.IgnoreMechs,
+        listingStandard.CheckboxLabeled("VariedBodySizes.ignoreMechs.label".Translate(), ref Settings.IgnoreMechs,
             "VariedBodySizes.ignoreMechs.tooltip".Translate());
-        listing_Standard.CheckboxLabeled("VariedBodySizes.separateFemale.label".Translate(),
+        listingStandard.CheckboxLabeled("VariedBodySizes.separateFemale.label".Translate(),
             ref Settings.SeparateFemale,
             "VariedBodySizes.separateFemale.tooltip".Translate());
 
-        listing_Standard.NewColumn();
+        listingStandard.NewColumn();
 
-        listing_Standard.CheckboxLabeled("VariedBodySizes.logging.label".Translate(), ref Settings.VerboseLogging,
+        listingStandard.CheckboxLabeled("VariedBodySizes.logging.label".Translate(), ref Settings.VerboseLogging,
             "VariedBodySizes.logging.tooltip".Translate());
-        listing_Standard.CheckboxLabeled("VariedBodySizes.realbodysize.label".Translate(),
+        listingStandard.CheckboxLabeled("VariedBodySizes.realbodysize.label".Translate(),
             ref Settings.AffectRealBodySize,
             "VariedBodySizes.realbodysize.tooltip".Translate());
-        listing_Standard.CheckboxLabeled("VariedBodySizes.realhealthscale.label".Translate(),
+        listingStandard.CheckboxLabeled("VariedBodySizes.realhealthscale.label".Translate(),
             ref Settings.AffectRealHealthScale,
             "VariedBodySizes.realhealthscale.tooltip".Translate());
-        listing_Standard.CheckboxLabeled("VariedBodySizes.realhungerrate.label".Translate(),
+        listingStandard.CheckboxLabeled("VariedBodySizes.realhungerrate.label".Translate(),
             ref Settings.AffectRealHungerRate,
             "VariedBodySizes.realhungerrate.tooltip".Translate());
-        listing_Standard.CheckboxLabeled("VariedBodySizes.meleedamage.label".Translate(),
+        listingStandard.CheckboxLabeled("VariedBodySizes.meleedamage.label".Translate(),
             ref Settings.AffectMeleeDamage,
             "VariedBodySizes.meleedamage.tooltip".Translate());
-        listing_Standard.CheckboxLabeled("VariedBodySizes.meleedodgechance.label".Translate(),
+        listingStandard.CheckboxLabeled("VariedBodySizes.meleedodgechance.label".Translate(),
             ref Settings.AffectMeleeDodgeChance,
             "VariedBodySizes.meleedodgechance.tooltip".Translate());
-        listing_Standard.CheckboxLabeled("VariedBodySizes.harvestyield.label".Translate(),
+        listingStandard.CheckboxLabeled("VariedBodySizes.harvestyield.label".Translate(),
             ref Settings.AffectHarvestYield,
             "VariedBodySizes.harvestyield.tooltip".Translate());
         if (ModLister.BiotechInstalled)
         {
-            listing_Standard.CheckboxLabeled("VariedBodySizes.lactating.label".Translate(),
+            listingStandard.CheckboxLabeled("VariedBodySizes.lactating.label".Translate(),
                 ref Settings.AffectLactating,
                 "VariedBodySizes.lactating.tooltip".Translate());
         }
@@ -178,7 +178,7 @@ internal class VariedBodySizesMod : Mod
 
         if (Main.VehiclesLoaded)
         {
-            listing_Standard.CheckboxLabeled("VariedBodySizes.ignoreVehicles.label".Translate(),
+            listingStandard.CheckboxLabeled("VariedBodySizes.ignoreVehicles.label".Translate(),
                 ref Settings.IgnoreVehicles,
                 "VariedBodySizes.ignoreVehicles.tooltip".Translate());
         }
@@ -190,20 +190,20 @@ internal class VariedBodySizesMod : Mod
         if (currentVersion != null)
         {
             GUI.contentColor = Color.gray;
-            listing_Standard.Label("VariedBodySizes.version.label".Translate(currentVersion));
+            listingStandard.Label("VariedBodySizes.version.label".Translate(currentVersion));
             GUI.contentColor = Color.white;
         }
 
-        listing_Standard.End();
-        var listing_Second = new Listing_Standard();
+        listingStandard.End();
+        var listingSecond = new Listing_Standard();
         var secondRect = rect;
-        secondRect.height -= listing_Standard.CurHeight;
-        secondRect.y += listing_Standard.CurHeight;
-        listing_Second.Begin(secondRect);
+        secondRect.height -= listingStandard.CurHeight;
+        secondRect.y += listingStandard.CurHeight;
+        listingSecond.Begin(secondRect);
 
-        listing_Second.GapLine();
+        listingSecond.GapLine();
         Text.Font = GameFont.Medium;
-        var titleRect = listing_Second.Label("VariedBodySizes.variations.label".Translate());
+        var titleRect = listingSecond.Label("VariedBodySizes.variations.label".Translate());
         Text.Font = GameFont.Small;
         if (Widgets.ButtonText(titleRect.LeftHalf().RightHalf().RightHalf(), "VariedBodySizes.reset".Translate()))
         {
@@ -222,11 +222,11 @@ internal class VariedBodySizesMod : Mod
                 .ToList();
         }
 
-        listing_Second.End();
+        listingSecond.End();
 
         var borderRect = rect;
-        borderRect.height -= listing_Standard.CurHeight + listing_Second.CurHeight;
-        borderRect.y += listing_Standard.CurHeight + listing_Second.CurHeight;
+        borderRect.height -= listingStandard.CurHeight + listingSecond.CurHeight;
+        borderRect.y += listingStandard.CurHeight + listingSecond.CurHeight;
         var scrollContentRect = borderRect;
         scrollContentRect.height = allPawnTypes.Count * 61f;
         scrollContentRect.width -= 20;
@@ -254,11 +254,11 @@ internal class VariedBodySizesMod : Mod
             var originalColor = GUI.contentColor;
             var pawnTypeDefName = pawnType.defName;
 
-            if (instance.Settings.VariedBodySizes.TryGetValue(pawnTypeDefName, out var bodySize))
+            if (Instance.Settings.VariedBodySizes.TryGetValue(pawnTypeDefName, out var bodySize))
             {
                 if (locked)
                 {
-                    instance.Settings.VariedBodySizes.Remove(pawnTypeDefName);
+                    Instance.Settings.VariedBodySizes.Remove(pawnTypeDefName);
                 }
                 else
                 {
@@ -274,7 +274,7 @@ internal class VariedBodySizesMod : Mod
             }
 
             var raceLabel = $"{genderAddon}{pawnType.label.CapitalizeFirst()} ({pawnType.defName}) - {modInfo}";
-            DrawIcon(pawnType,
+            drawIcon(pawnType,
                 new Rect(rowRect.position, iconSize));
             var nameRect = new Rect(rowRect.position + new Vector2(iconSize.x, 3f),
                 rowRect.size - new Vector2(iconSize.x, (rowRect.height / 2) + 3f));
@@ -299,10 +299,7 @@ internal class VariedBodySizesMod : Mod
                 continue;
             }
 
-            if (Settings.VariedBodySizes.ContainsKey(pawnTypeDefName))
-            {
-                Settings.VariedBodySizes.Remove(pawnTypeDefName);
-            }
+            Settings.VariedBodySizes.Remove(pawnTypeDefName);
 
             if (!Settings.SeparateFemale || !pawnType.race.hasGenders)
             {
@@ -338,7 +335,7 @@ internal class VariedBodySizesMod : Mod
 
             genderAddon = "♀ ";
             raceLabel = $"{genderAddon}{pawnType.label.CapitalizeFirst()} ({pawnType.defName}) - {modInfo}";
-            DrawIcon(pawnType,
+            drawIcon(pawnType,
                 new Rect(rowRect.position, iconSize));
             nameRect = new Rect(rowRect.position + new Vector2(iconSize.x, 3f),
                 rowRect.size - new Vector2(iconSize.x, (rowRect.height / 2) + 3f));
@@ -364,10 +361,7 @@ internal class VariedBodySizesMod : Mod
                 continue;
             }
 
-            if (Settings.VariedBodySizes.ContainsKey(pawnTypeDefName))
-            {
-                Settings.VariedBodySizes.Remove(pawnTypeDefName);
-            }
+            Settings.VariedBodySizes.Remove(pawnTypeDefName);
         }
 
         scrollListing.End();
@@ -380,7 +374,7 @@ internal class VariedBodySizesMod : Mod
         Main.ResetAllCaches();
     }
 
-    private void DrawIcon(ThingDef pawn, Rect rect)
+    private static void drawIcon(ThingDef pawn, Rect rect)
     {
         rect = rect.ContractedBy(3f);
         var pawnKind = DefDatabase<PawnKindDef>.GetNamedSilentFail(pawn.defName);

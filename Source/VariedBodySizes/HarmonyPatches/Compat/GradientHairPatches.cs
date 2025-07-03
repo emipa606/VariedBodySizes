@@ -12,7 +12,7 @@ public static partial class HarmonyPatches
 
         public static bool Prepare()
         {
-            return ModsConfig.IsActive("automatic.gradienthair") && NotNull(maskInit);
+            return ModsConfig.IsActive("automatic.gradienthair") && notNull(maskInit);
         }
 
         public static MethodBase TargetMethod()
@@ -36,24 +36,24 @@ public static partial class HarmonyPatches
             var pattern = InstructionMatchSignature((Graphic self, GraphicRequest req) =>
             {
                 var args = req.path.Split('\0');
-                Pin(ref args);
+                pin(ref args);
                 var mask = args[1];
-                Pin(ref mask);
+                pin(ref mask);
             });
-            var replacement = InstructionSignature((Graphic self, GraphicRequest req) =>
+            var replacement = instructionSignature((Graphic self, GraphicRequest req) =>
             {
                 var args = req.path.Split('\0');
                 self.maskPath = ProcessMaskPath(args, req);
             });
-            editor.Replace(pattern, replacement);
+            editor.replace(pattern, replacement);
 
             // Replace lookups for the local with the field reference
             // e.g. `array2[0] = ContentFinder<Texture2D>.Get(mask, false);` -> `array2[0] = ContentFinder<Texture2D>.Get(maskPath, false);`
             var lookupPattern = new[] { new CodeMatch(OpCodes.Ldloc_1) };
-            var lookupReplacement = InstructionSignature((Graphic self) => self.maskPath).ToArray();
+            var lookupReplacement = instructionSignature((Graphic self) => self.maskPath).ToArray();
             while (editor.IsValid)
             {
-                editor.Replace(lookupPattern, lookupReplacement, suppress: true);
+                editor.replace(lookupPattern, lookupReplacement, suppress: true);
             }
 
             // Done!

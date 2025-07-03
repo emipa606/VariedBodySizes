@@ -1,10 +1,8 @@
-using System.Runtime.CompilerServices;
-
 namespace VariedBodySizes;
 
 public class TimedCache<T>(int expiryTime)
 {
-    private readonly Dictionary<int, CacheEntry<T>> internalCache = new Dictionary<int, CacheEntry<T>>();
+    private readonly Dictionary<int, CacheEntry<T>> internalCache = new();
 
     public void Set(Pawn pawn, T value)
     {
@@ -28,17 +26,16 @@ public class TimedCache<T>(int expiryTime)
 
     public bool TryGet(Pawn pawn, out T value)
     {
-        ref var reference = ref internalCache.TryGetReferenceUnsafe(pawn.thingIDNumber);
-        if (!Unsafe.IsNullRef(ref reference))
+        if (internalCache.TryGetValue(pawn.thingIDNumber, out var entry))
         {
-            if (reference.Expired(expiryTime))
+            if (entry.Expired(expiryTime))
             {
                 internalCache.Remove(pawn.thingIDNumber);
                 value = default;
                 return false;
             }
 
-            value = reference.CachedValue;
+            value = entry.CachedValue;
             return true;
         }
 
@@ -48,6 +45,6 @@ public class TimedCache<T>(int expiryTime)
 
     public T Get(Pawn pawn)
     {
-        return internalCache.GetReference(pawn.thingIDNumber).CachedValue;
+        return internalCache[pawn.thingIDNumber].CachedValue;
     }
 }

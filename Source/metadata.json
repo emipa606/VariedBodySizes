@@ -2,7 +2,7 @@
   "Continued": false,
   "CanAdd": "0",
   "CanRemove": "2",
-  "PreviewVersion": "1.5",
+  "PreviewVersion": "1.6",
   "SocialImageSet": true,
   "FundingSet": true,
   "SearchTags": [
@@ -10,5 +10,10 @@
     " pawn size",
     " scale options."
   ],
-  "LastXmlCleaning": "2025-03-18T23:55:56.3991101+01:00"
+  "LastXmlCleaning": "2025-07-03T22:25:49.1428002+02:00",
+  "Patches": false,
+  "Defs": false,
+  "Assemblies": true,
+  "LinesOfCode": 68166.0,
+  "LinesOfXML": 0
 }

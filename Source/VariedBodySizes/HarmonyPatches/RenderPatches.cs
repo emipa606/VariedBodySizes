@@ -43,7 +43,7 @@ public static partial class HarmonyPatches
     {
         public static bool Prepare()
         {
-            return NotNull(getHumanlikeBodyWidthFunc);
+            return notNull(getHumanlikeBodyWidthFunc);
         }
 
 
@@ -67,7 +67,7 @@ public static partial class HarmonyPatches
 
         public static bool Prepare()
         {
-            return NotNull(humanlikeHeadWidthForPawn);
+            return notNull(humanlikeHeadWidthForPawn);
         }
 
 
@@ -87,11 +87,11 @@ public static partial class HarmonyPatches
             var editor = new CodeMatcher(instructions);
 
             var fixedWidth = InstructionMatchSignature(() => 1.5f);
-            var newGetMeshSetForWidth = InstructionSignature((Pawn pawn) =>
+            var newGetMeshSetForWidth = instructionSignature((Pawn pawn) =>
                 // ReSharper disable once ConvertClosureToMethodGroup - accepting this suggestion breaks the signature
                 1.5f * GetScalarForPawn(pawn)
             ); // We reference this multiple times, so we .ToArray to avoid multi-enumeration issues.
-            editor.Start().Replace(fixedWidth, newGetMeshSetForWidth, suppress: true);
+            editor.Start().replace(fixedWidth, newGetMeshSetForWidth, suppress: true);
 
             return editor.InstructionEnumeration();
         }
@@ -101,20 +101,15 @@ public static partial class HarmonyPatches
     [HarmonyPatch]
     public static class PawnGraphicSet_ResolveAllGraphicsPatch
     {
-        private static readonly Dictionary<Pawn, Dictionary<FieldInfo, Vector2>> originalSizes =
-            new Dictionary<Pawn, Dictionary<FieldInfo, Vector2>>();
+        private static readonly Dictionary<Pawn, Dictionary<FieldInfo, Vector2>> originalSizes = new();
 
-        private static readonly Dictionary<Pawn, Dictionary<Gene, Vector2>> originalGeneSizes =
-            new Dictionary<Pawn, Dictionary<Gene, Vector2>>();
+        private static readonly Dictionary<Pawn, Dictionary<Gene, Vector2>> originalGeneSizes = new();
 
-        private static readonly Dictionary<Pawn, Dictionary<Apparel, Vector2>> originalGearSizes =
-            new Dictionary<Pawn, Dictionary<Apparel, Vector2>>();
+        private static readonly Dictionary<Pawn, Dictionary<Apparel, Vector2>> originalGearSizes = new();
 
-        private static readonly Dictionary<Pawn, Dictionary<Hediff, Vector2>> originalHediffSizes =
-            new Dictionary<Pawn, Dictionary<Hediff, Vector2>>();
+        private static readonly Dictionary<Pawn, Dictionary<Hediff, Vector2>> originalHediffSizes = new();
 
-        private static readonly Dictionary<Pawn, Dictionary<Trait, Vector2>> originalTraitSizes =
-            new Dictionary<Pawn, Dictionary<Trait, Vector2>>();
+        private static readonly Dictionary<Pawn, Dictionary<Trait, Vector2>> originalTraitSizes = new();
 
         private static readonly IEnumerable<FieldInfo> graphicFields = AccessTools
             .GetDeclaredFields(typeof(PawnRenderTree))
@@ -126,7 +121,7 @@ public static partial class HarmonyPatches
         private static bool ProcessField<TKey>(Dictionary<TKey, Vector2> backingDict, TKey key, Graphic graphic,
             float pawnScale, out Graphic scaledGraphic)
         {
-            scaledGraphic = default;
+            scaledGraphic = null;
             if (key is null)
             {
                 return false;
@@ -178,68 +173,70 @@ public static partial class HarmonyPatches
 
             if (node.apparel is not null)
             {
-                _ = node.graphic;
+                _ = node.primaryGraphic;
 
                 // If it doesn't match we won't have a rotting graphic anyway
-                if (!ProcessField(originalGearSizes[pawn], node.apparel, node.graphic, pawnDrawSize,
+                if (!ProcessField(originalGearSizes[pawn], node.apparel, node.primaryGraphic, pawnDrawSize,
                         out var scaledGraphic))
                 {
                     return;
                 }
 
                 // Pop back and continue
-                node.graphic = scaledGraphic;
+                node.primaryGraphic = scaledGraphic;
             }
 
             if (node.hediff is not null)
             {
-                _ = node.graphic;
+                _ = node.primaryGraphic;
 
                 // If it doesn't match we won't have a rotting graphic anyway
-                if (!ProcessField(originalHediffSizes[pawn], node.hediff, node.graphic, pawnDrawSize,
+                if (!ProcessField(originalHediffSizes[pawn], node.hediff, node.primaryGraphic, pawnDrawSize,
                         out var scaledGraphic))
                 {
                     return;
                 }
 
                 // Pop back and continue
-                node.graphic = scaledGraphic;
+                node.primaryGraphic = scaledGraphic;
             }
 
             if (node.gene is not null)
             {
-                _ = node.graphic;
+                _ = node.primaryGraphic;
 
                 // If it doesn't match we won't have a rotting graphic anyway
-                if (!ProcessField(originalGeneSizes[pawn], node.gene, node.graphic, pawnDrawSize,
+                if (!ProcessField(originalGeneSizes[pawn], node.gene, node.primaryGraphic, pawnDrawSize,
                         out var scaledGraphic))
                 {
                     return;
                 }
 
                 // Pop back and continue
-                node.graphic = scaledGraphic;
+                node.primaryGraphic = scaledGraphic;
             }
 
-            if (node.trait is not null)
+            if (node.trait is null)
             {
-                _ = node.graphic;
-
-                // If it doesn't match we won't have a rotting graphic anyway
-                if (!ProcessField(originalTraitSizes[pawn], node.trait, node.graphic, pawnDrawSize,
-                        out var scaledGraphic))
-                {
-                    return;
-                }
-
-                // Pop back and continue
-                node.graphic = scaledGraphic;
+                return;
             }
+
+            _ = node.primaryGraphic;
+
+            // If it doesn't match we won't have a rotting graphic anyway
+            if (!ProcessField(originalTraitSizes[pawn], node.trait, node.primaryGraphic, pawnDrawSize,
+                    out var primaryGraphic))
+            {
+                return;
+            }
+
+            // Pop back and continue
+            node.primaryGraphic = primaryGraphic;
         }
 
         public static bool Prepare()
         {
-            return NotNull(resolveAllGraphics);
+            return notNull(resolveAllGraphics);
         }
 
 
@@ -295,8 +292,8 @@ public static partial class HarmonyPatches
             // ReSharper disable all UnusedVariable
             var pattern = InstructionMatchSignature((Pawn pawn) => pawn.story.headType.hairMeshSize);
             var replacement =
-                InstructionSignature((Pawn pawn) => GetScalarForPawn(pawn) * pawn.story.headType.hairMeshSize);
-            editor.Start().Replace(pattern, replacement);
+                instructionSignature((Pawn pawn) => GetScalarForPawn(pawn) * pawn.story.headType.hairMeshSize);
+            editor.Start().replace(pattern, replacement);
 
             return editor.InstructionEnumeration();
         }
@@ -312,8 +309,8 @@ public static partial class HarmonyPatches
             // Just adding our multiplier in here
             var pattern = InstructionMatchSignature((Pawn pawn) => pawn.story.headType.beardMeshSize);
             var replacement =
-                InstructionSignature((Pawn pawn) => GetScalarForPawn(pawn) * pawn.story.headType.beardMeshSize);
-            editor.Start().Replace(pattern, replacement);
+                instructionSignature((Pawn pawn) => GetScalarForPawn(pawn) * pawn.story.headType.beardMeshSize);
+            editor.Start().replace(pattern, replacement);
 
             return editor.InstructionEnumeration();
         }
@@ -331,15 +328,15 @@ public static partial class HarmonyPatches
             {
                 var size = self.pawn.story.bodyType.headOffset *
                            Mathf.Sqrt(self.pawn.ageTracker.CurLifeStage.bodySizeFactor);
-                Pin(ref size);
+                pin(ref size);
             });
-            var replacement = InstructionSignature((PawnRenderer self) =>
+            var replacement = instructionSignature((PawnRenderer self) =>
             {
                 var size = self.pawn.story.bodyType.headOffset *
                            Mathf.Sqrt(self.pawn.ageTracker.CurLifeStage.bodySizeFactor) * GetScalarForPawn(self.pawn);
-                Pin(ref size);
+                pin(ref size);
             });
-            editor.Start().Replace(pattern, replacement);
+            editor.Start().replace(pattern, replacement);
 
             return editor.InstructionEnumeration();
         }

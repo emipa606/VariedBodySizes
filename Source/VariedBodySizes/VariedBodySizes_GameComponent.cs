@@ -5,7 +5,7 @@ namespace VariedBodySizes;
 
 public class VariedBodySizes_GameComponent : GameComponent
 {
-    internal readonly TimedCache<float> sizeCache = new TimedCache<float>(36);
+    internal readonly TimedCache<float> SizeCache = new(36);
     public Dictionary<int, float> VariedBodySizesDictionary;
 
     // ReSharper disable once UnusedParameter.Local
@@ -16,7 +16,7 @@ public class VariedBodySizes_GameComponent : GameComponent
 
     // This way others can hook and modify while benefiting from our cache
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.PreserveSig)]
-    public static float OnCalculateBodySize(float bodySize, Pawn pawn)
+    private static float OnCalculateBodySize(float bodySize, Pawn pawn)
     {
         return pawn == null ? 1f : bodySize;
     }
@@ -34,7 +34,7 @@ public class VariedBodySizes_GameComponent : GameComponent
         }
 
         // cached value, or calculate, cache and return
-        if (sizeCache.TryGet(pawn, out var cachedSize))
+        if (SizeCache.TryGet(pawn, out var cachedSize))
         {
             return cachedSize;
         }
@@ -48,7 +48,7 @@ public class VariedBodySizes_GameComponent : GameComponent
             VariedBodySizesDictionary[pawnId] = bodySize;
 
             // Only delegate the string building when it's relevant
-            if (VariedBodySizesMod.instance.Settings.VerboseLogging)
+            if (VariedBodySizesMod.Instance.Settings.VerboseLogging)
             {
                 Main.LogMessage($"Setting size of {pawn.NameFullColored} ({pawn.ThingID}) to {bodySize}");
             }
@@ -56,7 +56,7 @@ public class VariedBodySizes_GameComponent : GameComponent
 
         // Apply any registered modifiers when storing
         bodySize = OnCalculateBodySize(bodySize, pawn);
-        sizeCache.Set(pawn, bodySize);
+        SizeCache.Set(pawn, bodySize);
 
         return bodySize;
     }

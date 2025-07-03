@@ -7,7 +7,7 @@ public static partial class HarmonyPatches
     {
         public static void Postfix(ref float __result, Pawn __instance)
         {
-            if (!VariedBodySizesMod.instance.Settings.AffectRealBodySize)
+            if (!VariedBodySizesMod.Instance.Settings.AffectRealBodySize)
             {
                 return;
             }
@@ -34,7 +34,7 @@ public static partial class HarmonyPatches
     {
         public static void Postfix(ref float __result, Pawn __instance)
         {
-            if (!VariedBodySizesMod.instance.Settings.AffectRealHealthScale)
+            if (!VariedBodySizesMod.Instance.Settings.AffectRealHealthScale)
             {
                 return;
             }
@@ -48,7 +48,7 @@ public static partial class HarmonyPatches
     {
         public static void Postfix(ref float __result, Pawn ___pawn)
         {
-            if (!VariedBodySizesMod.instance.Settings.AffectRealHungerRate)
+            if (!VariedBodySizesMod.Instance.Settings.AffectRealHungerRate)
             {
                 return;
             }
@@ -62,7 +62,7 @@ public static partial class HarmonyPatches
     {
         public static void Postfix(ref string __result, StatRequest req)
         {
-            if (!VariedBodySizesMod.instance.Settings.AffectRealBodySize)
+            if (!VariedBodySizesMod.Instance.Settings.AffectRealBodySize)
             {
                 return;
             }
@@ -97,7 +97,7 @@ public static partial class HarmonyPatches
         public static void Prefix(Pawn p, out Tuple<float, float> __state)
         {
             __state = new Tuple<float, float>(float.NaN, float.NaN);
-            if (!VariedBodySizesMod.instance.Settings.AffectRealHungerRate)
+            if (!VariedBodySizesMod.Instance.Settings.AffectRealHungerRate)
             {
                 return;
             }
@@ -140,7 +140,7 @@ public static partial class HarmonyPatches
 
         public static void Postfix(ref int __result, ThingWithComps ___parent)
         {
-            if (!VariedBodySizesMod.instance.Settings.AffectHarvestYield)
+            if (!VariedBodySizesMod.Instance.Settings.AffectHarvestYield)
             {
                 return;
             }
@@ -160,7 +160,7 @@ public static partial class HarmonyPatches
         public static void Prefix(HediffComp_Chargeable __instance, ref float desiredCharge, out bool __state)
         {
             __state = false;
-            if (!VariedBodySizesMod.instance.Settings.AffectLactating)
+            if (!VariedBodySizesMod.Instance.Settings.AffectLactating)
             {
                 return;
             }

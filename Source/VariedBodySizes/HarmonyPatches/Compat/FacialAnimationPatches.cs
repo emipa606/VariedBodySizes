@@ -9,11 +9,11 @@ public static partial class HarmonyPatches
         private static readonly MethodBase getHeadMeshSet =
             AccessTools.Method("FacialAnimation.GraphicHelper:GetHeadMeshSet");
 
-        public static readonly TimedCache<GraphicMeshSet> HeadCache = new TimedCache<GraphicMeshSet>(360);
+        public static readonly TimedCache<GraphicMeshSet> HeadCache = new(360);
 
         public static bool Prepare()
         {
-            return ModsConfig.IsActive("Nals.FacialAnimation") && NotNull(getHeadMeshSet);
+            return ModsConfig.IsActive("Nals.FacialAnimation") && notNull(getHeadMeshSet);
         }
 
         public static MethodBase TargetMethod()

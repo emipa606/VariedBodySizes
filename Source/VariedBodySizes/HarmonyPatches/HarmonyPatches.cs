@@ -21,9 +21,11 @@ public static partial class HarmonyPatches
         // Most of the VEF render patches co-exist fine, these don't.
         var vePatchesToUndo = new[]
         {
-            new KeyValuePair<Type, string>(typeof(HumanlikeMeshPoolUtility), "GetHumanlikeBodySetForPawn"),
-            new KeyValuePair<Type, string>(typeof(HumanlikeMeshPoolUtility), "GetHumanlikeHeadSetForPawn"),
-            new KeyValuePair<Type, string>(typeof(PawnRenderer), "BaseHeadOffsetAt")
+            new KeyValuePair<Type, string>(typeof(HumanlikeMeshPoolUtility),
+                nameof(HumanlikeMeshPoolUtility.GetHumanlikeBodySetForPawn)),
+            new KeyValuePair<Type, string>(typeof(HumanlikeMeshPoolUtility),
+                nameof(HumanlikeMeshPoolUtility.GetHumanlikeHeadSetForPawn)),
+            new KeyValuePair<Type, string>(typeof(PawnRenderer), nameof(PawnRenderer.BaseHeadOffsetAt))
         };
         // Go through the problem methods, if they have a VEF-originated patch then remove it
         foreach (var targetPair in vePatchesToUndo)
@@ -54,7 +56,7 @@ public static partial class HarmonyPatches
         return Main.CurrentComponent?.GetVariedBodySize(pawn) ?? 1f;
     }
 
-    private static bool NotNull(params object[] input)
+    private static bool notNull(params object[] input)
     {
         if (input.All(o => o is not null))
         {
@@ -77,7 +79,7 @@ public static partial class HarmonyPatches
     ///     Returns the type that called a transpiler in a given stack trace
     /// </summary>
     /// <returns></returns>
-    private static string GetTranspilerStackFrame()
+    private static string getTranspilerStackFrame()
     {
         var trace = new StackTrace();
         foreach (var frame in trace.GetFrames()!)
@@ -99,7 +101,7 @@ public static partial class HarmonyPatches
         {
             case true when !suppress:
                 Main.LogMessage(
-                    $"Transpiler did not find target @ {GetTranspilerStackFrame()}",
+                    $"Transpiler did not find target @ {getTranspilerStackFrame()}",
                     true);
                 break;
             case false:
@@ -123,7 +125,7 @@ public static partial class HarmonyPatches
     /// <param name="suppress">Whether to suppress the log message on a failed match</param>
     /// <returns></returns>
     // ReSharper disable once UnusedMethodReturnValue.Local
-    private static CodeMatcher Replace(this CodeMatcher match, CodeMatch[] pattern, CodeInstructions replacement,
+    private static CodeMatcher replace(this CodeMatcher match, CodeMatch[] pattern, CodeInstructions replacement,
         bool replace = true, bool suppress = false)
     {
         return match.MatchStartForward(pattern).OnSuccess(matcher =>
@@ -166,7 +168,7 @@ public static partial class HarmonyPatches
     /// <param name="variable">The local to protect</param>
     [MethodImpl(MethodImplOptions.NoInlining)]
     // ReSharper disable once UnusedParameter.Local
-    private static void Pin<T>(ref T variable)
+    private static void pin<T>(ref T variable)
     {
         // Do nothing
     }
@@ -177,7 +179,7 @@ public static partial class HarmonyPatches
     /// <param name="method">The method to convert</param>
     /// <returns>A set of CodeInstructions representing the method given</returns>
     /// <remarks>Declared locals need to be pinned with Pin(ref local)</remarks>
-    private static CodeInstructions InstructionSignature(Delegate method)
+    private static CodeInstructions instructionSignature(Delegate method)
     {
         var instructions = new List<CodeInstruction>();
         var locals = method.Method.GetMethodBody()!.LocalVariables;
@@ -217,7 +219,7 @@ public static partial class HarmonyPatches
                 if (lastInstruction.OpCode == OpCodes.Ldloca_S || lastInstruction.OpCode == OpCodes.Ldloca)
                 {
                     // Fetch the instruction for Pin<T> where T is whatever type lastInstruction accesses...
-                    var genericPin = Fish.Call(typeof(HarmonyPatches), "Pin", generics:
+                    var genericPin = Fish.Call(typeof(HarmonyPatches), nameof(pin), generics:
                     [
                         locals[lastInstruction.GetIndex()].LocalType
                     ]);
@@ -247,6 +249,6 @@ public static partial class HarmonyPatches
     /// <remarks>Declared locals need to be pinned with Pin(ref local)</remarks>
     private static CodeMatch[] InstructionMatchSignature(Delegate method)
     {
-        return InstructionSignature(method).Select(i => new CodeMatch(i.opcode, i.operand)).ToArray();
+        return instructionSignature(method).Select(i => new CodeMatch(i.opcode, i.operand)).ToArray();
     }
 }

@@ -12,8 +12,8 @@ public class VariedBodySizesModSettings : ModSettings
     public bool AffectRealBodySize = ModsConfig.IsActive("mute.genebodysize");
     public bool AffectRealHealthScale = ModsConfig.IsActive("mute.genebodysize");
     public bool AffectRealHungerRate;
-    public FloatRange DefaultVariation = new FloatRange(0.9f, 1.1f);
-    public FloatRange DefaultVariationFemale = new FloatRange(0.9f, 1.1f);
+    public FloatRange DefaultVariation = new(0.9f, 1.1f);
+    public FloatRange DefaultVariationFemale = new(0.9f, 1.1f);
     public bool IgnoreMechs;
     public bool IgnoreVehicles;
     public bool SeparateFemale;
