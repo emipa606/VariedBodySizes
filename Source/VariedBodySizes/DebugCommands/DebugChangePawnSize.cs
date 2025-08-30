@@ -90,11 +90,8 @@ public static class DebugChangePawnSize
             return;
         }
 
-        Main.CurrentComponent.VariedBodySizesDictionary[pawn.thingIDNumber] = currentSize;
         Main.ResetAllCaches(pawn);
-        // Required for...reasons? The game doesn't seem to update its internal cache until the game is unpaused
-        // So we have to update our own value instead of invalidating it and asking the game
-        Main.CurrentComponent.SizeCache.Set(pawn, currentSize);
+        Main.CurrentComponent.SetVariedBodySize(pawn, currentSize);
         pawn.Drawer.renderer.SetAllGraphicsDirty();
         Messages.Message(message, MessageTypeDefOf.TaskCompletion, false);
         DebugActionsUtility.DustPuffFrom(pawn);

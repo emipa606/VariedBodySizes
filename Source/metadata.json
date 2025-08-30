@@ -10,10 +10,11 @@
     " pawn size",
     " scale options."
   ],
-  "LastXmlCleaning": "2025-07-03T22:25:49.1428002+02:00",
+  "LastXmlCleaning": "2025-08-30T21:23:53.3738212+02:00",
   "Patches": false,
   "Defs": false,
   "Assemblies": true,
-  "LinesOfCode": 68166.0,
-  "LinesOfXML": 0
+  "LinesOfCode": 68912,
+  "LinesOfXML": 0,
+  "CodeBaseSize": 76
 }

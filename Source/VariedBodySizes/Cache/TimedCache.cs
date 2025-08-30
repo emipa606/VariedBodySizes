@@ -4,47 +4,73 @@ public class TimedCache<T>(int expiryTime)
 {
     private readonly Dictionary<int, CacheEntry<T>> internalCache = new();
 
+    // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
+    private readonly object sync = new();
+
     public void Set(Pawn pawn, T value)
     {
-        internalCache[pawn.thingIDNumber] = new CacheEntry<T>(value);
+        var key = pawn.thingIDNumber;
+        lock (sync)
+        {
+            internalCache[key] = new CacheEntry<T>(value);
+        }
     }
 
     public void Clear()
     {
-        internalCache.Clear();
+        lock (sync)
+        {
+            internalCache.Clear();
+        }
     }
 
     public void Remove(Pawn pawn)
     {
-        internalCache.Remove(pawn.thingIDNumber);
+        var key = pawn.thingIDNumber;
+        lock (sync)
+        {
+            internalCache.Remove(key);
+        }
     }
 
     public bool Contains(Pawn pawn)
     {
-        return internalCache.ContainsKey(pawn.thingIDNumber);
+        var key = pawn.thingIDNumber;
+        lock (sync)
+        {
+            return internalCache.ContainsKey(key);
+        }
     }
 
     public bool TryGet(Pawn pawn, out T value)
     {
-        if (internalCache.TryGetValue(pawn.thingIDNumber, out var entry))
+        var key = pawn.thingIDNumber;
+        lock (sync)
         {
-            if (entry.Expired(expiryTime))
+            if (internalCache.TryGetValue(key, out var entry))
             {
-                internalCache.Remove(pawn.thingIDNumber);
-                value = default;
-                return false;
+                if (entry.Expired(expiryTime))
+                {
+                    internalCache.Remove(key);
+                    value = default;
+                    return false;
+                }
+
+                value = entry.CachedValue;
+                return true;
             }
 
-            value = entry.CachedValue;
-            return true;
+            value = default;
+            return false;
         }
-
-        value = default;
-        return false;
     }
 
     public T Get(Pawn pawn)
     {
-        return internalCache[pawn.thingIDNumber].CachedValue;
+        var key = pawn.thingIDNumber;
+        lock (sync)
+        {
+            return internalCache[key].CachedValue;
+        }
     }
 }

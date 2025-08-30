@@ -5,6 +5,8 @@ namespace VariedBodySizes;
 
 public class VariedBodySizes_GameComponent : GameComponent
 {
+    // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
+    private readonly object dictLock = new();
     internal readonly TimedCache<float> SizeCache = new(36);
     public Dictionary<int, float> VariedBodySizesDictionary;
 
@@ -39,18 +41,22 @@ public class VariedBodySizes_GameComponent : GameComponent
             return cachedSize;
         }
 
-        VariedBodySizesDictionary ??= new Dictionary<int, float>();
-
+        float bodySize;
         var pawnId = pawn.thingIDNumber;
-        if (!VariedBodySizesDictionary.TryGetValue(pawnId, out var bodySize))
-        {
-            bodySize = Main.GetPawnVariation(pawn);
-            VariedBodySizesDictionary[pawnId] = bodySize;
 
-            // Only delegate the string building when it's relevant
-            if (VariedBodySizesMod.Instance.Settings.VerboseLogging)
+        lock (dictLock)
+        {
+            VariedBodySizesDictionary ??= new Dictionary<int, float>();
+
+            if (!VariedBodySizesDictionary.TryGetValue(pawnId, out bodySize))
             {
-                Main.LogMessage($"Setting size of {pawn.NameFullColored} ({pawn.ThingID}) to {bodySize}");
+                bodySize = Main.GetPawnVariation(pawn);
+                VariedBodySizesDictionary[pawnId] = bodySize;
+
+                if (VariedBodySizesMod.Instance.Settings.VerboseLogging)
+                {
+                    Main.LogMessage($"Setting size of {pawn.NameFullColored} ({pawn.ThingID}) to {bodySize}");
+                }
             }
         }
 
@@ -59,6 +65,22 @@ public class VariedBodySizes_GameComponent : GameComponent
         SizeCache.Set(pawn, bodySize);
 
         return bodySize;
+    }
+
+    public void SetVariedBodySize(Pawn pawn, float size)
+    {
+        if (pawn == null)
+        {
+            return;
+        }
+
+        lock (dictLock)
+        {
+            VariedBodySizesDictionary ??= new Dictionary<int, float>();
+            VariedBodySizesDictionary[pawn.thingIDNumber] = size;
+        }
+
+        SizeCache.Set(pawn, size);
     }
 
     /// <summary>
@@ -80,45 +102,51 @@ public class VariedBodySizes_GameComponent : GameComponent
         }
 
         var i = 0;
-        while (true)
+        lock (dictLock)
         {
             VariedBodySizesDictionary ??= new Dictionary<int, float>();
-            var key = keys[i];
-            var value = values[i++]; // next iter here
-            if (key is null || value is null)
-            {
-                break;
-            }
 
-            var keyText =
-                Regex.Match(key.InnerText, @"\d+$").Value; // drop all non-number, format is usually Thing_Human1234
-            var hasKey = int.TryParse(keyText, out var keyInt);
-            var hasValue = float.TryParse(value.InnerText, out var valueFloat);
-            if (hasKey && hasValue)
+            while (true)
             {
-                VariedBodySizesDictionary.Add(keyInt, valueFloat);
+                var key = keys[i];
+                var value = values[i++]; // next iter here
+                if (key is null || value is null)
+                {
+                    break;
+                }
+
+                var keyText = Regex.Match(key.InnerText, @"\d+$").Value;
+                var hasKey = int.TryParse(keyText, out var keyInt);
+                var hasValue = float.TryParse(value.InnerText, out var valueFloat);
+                if (hasKey && hasValue)
+                {
+                    VariedBodySizesDictionary[keyInt] = valueFloat;
+                }
             }
         }
 
-        //bodySizeDict.ParentNode?.RemoveChild(bodySizeDict);
-
-        return VariedBodySizesDictionary is not null;
+        lock (dictLock)
+        {
+            return VariedBodySizesDictionary is not null;
+        }
     }
 
     public override void ExposeData()
     {
         base.ExposeData();
-        // If it's migrated, we're initialized and all that. Don't have to care further.
         if (Scribe.mode == LoadSaveMode.LoadingVars && MigrateDictionaryFormat())
         {
             return;
         }
 
-        Scribe_Collections.Look(ref VariedBodySizesDictionary, "VariedBodySizesData", LookMode.Value, LookMode.Value);
-        // If we don't have one saved, make it
-        if (Scribe.mode == LoadSaveMode.PostLoadInit)
+        lock (dictLock)
         {
-            VariedBodySizesDictionary ??= new Dictionary<int, float>();
+            Scribe_Collections.Look(ref VariedBodySizesDictionary, "VariedBodySizesData", LookMode.Value,
+                LookMode.Value);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                VariedBodySizesDictionary ??= new Dictionary<int, float>();
+            }
         }
     }
 }

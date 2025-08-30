@@ -1,5 +1,8 @@
 # Changelog for VariedBodySizes
 
+1.6.1 - Made the size-dictionary thread safe as pawns can be generated in multiple threads at the same time
+
+
 1.6.0 - Mod updated for 1.6 and passed autotests
 
 
