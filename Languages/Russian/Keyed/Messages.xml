@@ -41,4 +41,6 @@
   <VariedBodySizes.defaultvariation.label.female>Вариант по умолчанию ♀</VariedBodySizes.defaultvariation.label.female>
   <VariedBodySizes.separateFemale.label>Ползунки для разделения полов</VariedBodySizes.separateFemale.label>
   <VariedBodySizes.separateFemale.tooltip>Добавляет возможность выбора отдельных значений для каждого пола</VariedBodySizes.separateFemale.tooltip>
+  <VariedBodySizes.relativeToAge.label>Динамический размер стадии жизни</VariedBodySizes.relativeToAge.label>
+  <VariedBodySizes.relativeToAge.tooltip>Размер пешки будет относиться к прогрессу стадии жизни пешки</VariedBodySizes.relativeToAge.tooltip>
 </LanguageData>

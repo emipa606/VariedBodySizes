@@ -41,4 +41,6 @@
   <VariedBodySizes.defaultvariation.label.female>默认变化 ♀</VariedBodySizes.defaultvariation.label.female>
   <VariedBodySizes.separateFemale.label>独立的性别滑块</VariedBodySizes.separateFemale.label>
   <VariedBodySizes.separateFemale.tooltip>增加了按性别选择不同数值的选项</VariedBodySizes.separateFemale.tooltip>
+  <VariedBodySizes.relativeToAge.label>动态生命阶段尺寸</VariedBodySizes.relativeToAge.label>
+  <VariedBodySizes.relativeToAge.tooltip>棋子的大小将与棋子的生命阶段进度相对应</VariedBodySizes.relativeToAge.tooltip>
 </LanguageData>

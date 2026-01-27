@@ -72,11 +72,13 @@ public static class Main
         {
             HarmonyPatches.FacialAnimation_GetHeadMeshSetPatch.HeadCache?.Clear();
             CurrentComponent?.SizeCache?.Clear();
+            HarmonyPatches.LifeStageCache?.Clear();
             return;
         }
 
         HarmonyPatches.FacialAnimation_GetHeadMeshSetPatch.HeadCache.Remove(pawn);
         CurrentComponent.SizeCache.Remove(pawn);
+        HarmonyPatches.LifeStageCache.Remove(pawn);
         GlobalTextureAtlasManager.TryMarkPawnFrameSetDirty(pawn);
     }
 

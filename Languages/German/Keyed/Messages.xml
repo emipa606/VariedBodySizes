@@ -41,4 +41,6 @@
   <VariedBodySizes.defaultvariation.label.female>Standardvariante ♀</VariedBodySizes.defaultvariation.label.female>
   <VariedBodySizes.separateFemale.label>Getrennte Schieberegler für die Geschlechter</VariedBodySizes.separateFemale.label>
   <VariedBodySizes.separateFemale.tooltip>Fügt die Option hinzu, separate Werte pro Geschlecht auszuwählen</VariedBodySizes.separateFemale.tooltip>
+  <VariedBodySizes.relativeToAge.label>Dynamische Lebensabschnittsgröße</VariedBodySizes.relativeToAge.label>
+  <VariedBodySizes.relativeToAge.tooltip>Die Größe der Spielfiguren wird relativ zum Fortschritt der Lebensphase der Spielfiguren sein</VariedBodySizes.relativeToAge.tooltip>
 </LanguageData>

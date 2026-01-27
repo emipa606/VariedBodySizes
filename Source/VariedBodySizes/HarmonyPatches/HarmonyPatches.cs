@@ -10,6 +10,8 @@ namespace VariedBodySizes;
 /// <remarks>Shared functions are defined in HarmonyPatches/HarmonyPatches.cs</remarks>
 public static partial class HarmonyPatches
 {
+    public static readonly TimedCache<float> LifeStageCache = new(36);
+
     // We have to overwrite their patches, unfortunately
     private static bool hasVef => ModsConfig.IsActive("oskarpotocki.vanillafactionsexpanded.core");
 
@@ -53,7 +55,42 @@ public static partial class HarmonyPatches
 
     public static float GetScalarForPawn(Pawn pawn)
     {
-        return Main.CurrentComponent?.GetVariedBodySize(pawn) ?? 1f;
+        var pawnScalar = Main.CurrentComponent?.GetVariedBodySize(pawn) ?? 1f;
+        if (VariedBodySizesMod.Instance.Settings.RelativeToAge)
+        {
+            pawnScalar *= GetLifestageScalar(pawn);
+        }
+
+        return pawnScalar;
+    }
+
+    private static float GetLifestageScalar(Pawn pawn)
+    {
+        if (pawn.ageTracker.CurLifeStageIndex == pawn.ageTracker.MaxRaceLifeStageIndex)
+        {
+            return 1f;
+        }
+
+        // Use a cached value if available, only calculate every so often
+        if (!pawn.IsHashIntervalTick(GenTicks.TickLongInterval) && LifeStageCache.TryGet(pawn, out var cachedFactor))
+        {
+            return cachedFactor;
+        }
+
+        var currentStage = pawn.RaceProps.lifeStageAges[pawn.ageTracker.CurLifeStageIndex];
+        var nextStage = pawn.RaceProps.lifeStageAges[pawn.ageTracker.CurLifeStageIndex + 1];
+        var ageProgress = (pawn.ageTracker.AgeBiologicalYearsFloat - currentStage.minAge) /
+                          (nextStage.minAge - currentStage.minAge);
+        var currentStageSize = pawn.ageTracker.CurLifeStage.bodySizeFactor;
+        var nextStageSize = pawn.RaceProps.lifeStageAges[pawn.ageTracker.CurLifeStageIndex + 1].def.bodySizeFactor;
+
+        // Update currentSize to be relative to the life stage sizes where the currentStageSize represents the current size at ageProgress 0
+        var lifeStageRelativeSize = currentStageSize +
+                                    ((nextStageSize - currentStageSize) * ageProgress);
+        var lifestageFactor = lifeStageRelativeSize / currentStageSize;
+
+        LifeStageCache.Set(pawn, lifestageFactor);
+        return lifestageFactor;
     }
 
     private static bool notNull(params object[] input)

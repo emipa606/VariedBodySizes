@@ -41,4 +41,6 @@
   <VariedBodySizes.defaultvariation.label.female>Variation par défaut ♀</VariedBodySizes.defaultvariation.label.female>
   <VariedBodySizes.separateFemale.label>Des curseurs distincts pour les hommes et les femmes</VariedBodySizes.separateFemale.label>
   <VariedBodySizes.separateFemale.tooltip>Ajoute l'option de sélectionner des valeurs distinctes par sexe</VariedBodySizes.separateFemale.tooltip>
+  <VariedBodySizes.relativeToAge.label>Taille dynamique du stade de vie</VariedBodySizes.relativeToAge.label>
+  <VariedBodySizes.relativeToAge.tooltip>La taille des pions sera relative à la progression de leur stade de vie.</VariedBodySizes.relativeToAge.tooltip>
 </LanguageData>

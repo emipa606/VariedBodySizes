@@ -16,6 +16,7 @@ public class VariedBodySizesModSettings : ModSettings
     public FloatRange DefaultVariationFemale = new(0.9f, 1.1f);
     public bool IgnoreMechs;
     public bool IgnoreVehicles;
+    public bool RelativeToAge;
     public bool SeparateFemale;
     public float StandardDeviationDivider = 6f;
     public float StandardDeviationDividerFemale = 6f;
@@ -39,6 +40,7 @@ public class VariedBodySizesModSettings : ModSettings
         Scribe_Values.Look(ref AffectLactating, "AffectLactating");
         Scribe_Values.Look(ref IgnoreMechs, "IgnoreMechs");
         Scribe_Values.Look(ref IgnoreVehicles, "IgnoreVehicles");
+        Scribe_Values.Look(ref RelativeToAge, "RelativeToAge");
         Scribe_Values.Look(ref StandardDeviationDivider, "StandardDeviationDivider", 6f);
         Scribe_Values.Look(ref StandardDeviationDividerFemale, "StandardDeviationDividerFemale", 6f);
         Scribe_Values.Look(ref DefaultVariation, "DefaultVariation", new FloatRange(0.9f, 1.1f));

@@ -1,5 +1,10 @@
 # Changelog for VariedBodySizes
 
+1.6.2 - Updated bundled 1Fishery.dll
+Added mod-option to make pawnsize take the current lifestage progress into account
+Used DeepL to update translations for ChineseSimplified, French, German, Russian
+
+
 1.6.1 - Made the size-dictionary thread safe as pawns can be generated in multiple threads at the same time
 
 

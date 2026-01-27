@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
+  <VariedBodySizes.relativeToAge.label>Dynamic lifestage size</VariedBodySizes.relativeToAge.label>
+  <VariedBodySizes.relativeToAge.tooltip>Pawn size will be relative to the pawns lifestage progress</VariedBodySizes.relativeToAge.tooltip>
   <VariedBodySizes.search>Search</VariedBodySizes.search>
   <VariedBodySizes.reset>Reset</VariedBodySizes.reset>
   <VariedBodySizes.StandardDeviationDivider>Spread of the values</VariedBodySizes.StandardDeviationDivider>

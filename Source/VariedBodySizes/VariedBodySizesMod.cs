@@ -114,6 +114,9 @@ internal class VariedBodySizesMod : Mod
             TooltipHandler.TipRegion(dividerRect, "VariedBodySizes.StandardDeviationDividerTT".Translate());
         }
 
+        listingStandard.CheckboxLabeled("VariedBodySizes.relativeToAge.label".Translate(), ref Settings.RelativeToAge,
+            "VariedBodySizes.relativeToAge.tooltip".Translate());
+
         if (Current.Game != null && Main.CurrentComponent != null)
         {
             var resetLabel = listingStandard.Label("VariedBodySizes.resetgame".Translate());
