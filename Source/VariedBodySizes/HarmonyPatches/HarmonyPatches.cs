@@ -10,7 +10,7 @@ namespace VariedBodySizes;
 /// <remarks>Shared functions are defined in HarmonyPatches/HarmonyPatches.cs</remarks>
 public static partial class HarmonyPatches
 {
-    public static readonly TimedCache<float> LifeStageCache = new(36);
+    public static readonly TimedCache<float> LifeStageCache = new(2000);
 
     // We have to overwrite their patches, unfortunately
     private static bool hasVef => ModsConfig.IsActive("oskarpotocki.vanillafactionsexpanded.core");
