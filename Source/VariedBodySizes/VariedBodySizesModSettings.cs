@@ -21,10 +21,10 @@ public class VariedBodySizesModSettings : ModSettings
     public float StandardDeviationDivider = 6f;
     public float StandardDeviationDividerFemale = 6f;
     public Dictionary<string, FloatRange> VariedBodySizes;
+    public bool VerboseLogging;
     private List<string> variedBodySizesKeys;
 
     private List<FloatRange> variedBodySizesValues;
-    public bool VerboseLogging;
 
     public override void ExposeData()
     {

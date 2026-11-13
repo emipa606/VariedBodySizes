@@ -5,9 +5,10 @@ namespace VariedBodySizes;
 
 public class VariedBodySizes_GameComponent : GameComponent
 {
+    internal readonly TimedCache<float> SizeCache = new(36);
+
     // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
     private readonly object dictLock = new();
-    internal readonly TimedCache<float> SizeCache = new(36);
     public Dictionary<int, float> VariedBodySizesDictionary;
 
     // ReSharper disable once UnusedParameter.Local
@@ -115,7 +116,7 @@ public class VariedBodySizes_GameComponent : GameComponent
                     break;
                 }
 
-                var keyText = Regex.Match(key.InnerText, @"\d+$").Value;
+                var keyText = Regex.Match(key.InnerText, @"\d+$", RegexOptions.None, TimeSpan.FromSeconds(1)).Value;
                 var hasKey = int.TryParse(keyText, out var keyInt);
                 var hasValue = float.TryParse(value.InnerText, out var valueFloat);
                 if (hasKey && hasValue)

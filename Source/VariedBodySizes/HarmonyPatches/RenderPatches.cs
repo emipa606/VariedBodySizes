@@ -7,14 +7,15 @@ namespace VariedBodySizes;
 public static partial class HarmonyPatches
 {
     private static readonly MethodBase getHumanlikeBodyWidthFunc =
-        AccessTools.Method(typeof(HumanlikeMeshPoolUtility), "HumanlikeBodyWidthForPawn");
+        AccessTools.Method(typeof(HumanlikeMeshPoolUtility),
+            nameof(HumanlikeMeshPoolUtility.HumanlikeBodyWidthForPawn));
 
     private static readonly FieldInfo pawnRendererPawn = AccessTools.Field("Verse.PawnRenderer:pawn");
 
     private static readonly MethodBase getScalar =
-        AccessTools.Method(typeof(HarmonyPatches), "GetScalarForPawn");
+        AccessTools.Method(typeof(HarmonyPatches), nameof(GetScalarForPawn));
 
-    [HarmonyPatch(typeof(PawnDrawUtility), "CalcAnchorData")]
+    [HarmonyPatch(typeof(PawnDrawUtility), nameof(PawnDrawUtility.CalcAnchorData))]
     public static class PawnDrawUtility_CalcAnchorDataPatch
     {
         public static void Postfix(Pawn pawn, Rot4 pawnRot, ref Vector3 anchorOffset)
@@ -63,7 +64,8 @@ public static partial class HarmonyPatches
     public static class HumanlikeMeshPoolUtility_HumanlikeHeadWidthForPawnPatch
     {
         private static readonly MethodBase humanlikeHeadWidthForPawn =
-            AccessTools.Method(typeof(HumanlikeMeshPoolUtility), "HumanlikeHeadWidthForPawn");
+            AccessTools.Method(typeof(HumanlikeMeshPoolUtility),
+                nameof(HumanlikeMeshPoolUtility.HumanlikeHeadWidthForPawn));
 
         public static bool Prepare()
         {
@@ -75,12 +77,6 @@ public static partial class HarmonyPatches
         {
             return humanlikeHeadWidthForPawn;
         }
-
-
-        /*public static void Postfix(Pawn pawn, ref float __result)
-        {
-            __result *= GetScalarForPawn(pawn);
-        }*/
 
         public static CodeInstructions Transpiler(CodeInstructions instructions, MethodBase method)
         {
@@ -116,7 +112,7 @@ public static partial class HarmonyPatches
             .Where(f => f.FieldType == typeof(Graphic));
 
         private static readonly MethodBase resolveAllGraphics =
-            AccessTools.Method(typeof(PawnRenderTree), "TrySetupGraphIfNeeded");
+            AccessTools.Method(typeof(PawnRenderTree), nameof(PawnRenderTree.TrySetupGraphIfNeeded));
 
         private static bool ProcessField<TKey>(Dictionary<TKey, Vector2> backingDict, TKey key, Graphic graphic,
             float pawnScale, out Graphic scaledGraphic)
@@ -281,7 +277,7 @@ public static partial class HarmonyPatches
     }
 
 
-    [HarmonyPatch(typeof(HumanlikeMeshPoolUtility), "GetHumanlikeHairSetForPawn")]
+    [HarmonyPatch(typeof(HumanlikeMeshPoolUtility), nameof(HumanlikeMeshPoolUtility.GetHumanlikeHairSetForPawn))]
     public static class GraphicMeshSet_GetHairSetForPawnPatch
     {
         public static CodeInstructions Transpiler(CodeInstructions instructions)
@@ -299,7 +295,7 @@ public static partial class HarmonyPatches
         }
     }
 
-    [HarmonyPatch(typeof(HumanlikeMeshPoolUtility), "GetHumanlikeBeardSetForPawn")]
+    [HarmonyPatch(typeof(HumanlikeMeshPoolUtility), nameof(HumanlikeMeshPoolUtility.GetHumanlikeBeardSetForPawn))]
     public static class GraphicMeshSet_GetBeardSetForPawnPatch
     {
         public static CodeInstructions Transpiler(CodeInstructions instructions)

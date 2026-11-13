@@ -47,10 +47,10 @@ internal class VariedBodySizesMod : Mod
     /// <summary>
     ///     The settings-window
     /// </summary>
-    /// <param name="rect"></param>
-    public override void DoSettingsWindowContents(Rect rect)
+    /// <param name="inRect"></param>
+    public override void DoSettingsWindowContents(Rect inRect)
     {
-        base.DoSettingsWindowContents(rect);
+        base.DoSettingsWindowContents(inRect);
         var originalAnchor = Text.Anchor;
         var genderAddon = "";
         if (Settings.SeparateFemale)
@@ -59,8 +59,8 @@ internal class VariedBodySizesMod : Mod
         }
 
         var listingStandard = new Listing_Standard();
-        listingStandard.Begin(rect);
-        listingStandard.ColumnWidth = rect.width / 2.1f;
+        listingStandard.Begin(inRect);
+        listingStandard.ColumnWidth = inRect.width / 2.1f;
 
         var variationRect = listingStandard.GetRect(30f);
         Widgets.FloatRange(variationRect, $"DefaultVariation{genderAddon}".GetHashCode(),
@@ -199,7 +199,7 @@ internal class VariedBodySizesMod : Mod
 
         listingStandard.End();
         var listingSecond = new Listing_Standard();
-        var secondRect = rect;
+        var secondRect = inRect;
         secondRect.height -= listingStandard.CurHeight;
         secondRect.y += listingStandard.CurHeight;
         listingSecond.Begin(secondRect);
@@ -227,7 +227,7 @@ internal class VariedBodySizesMod : Mod
 
         listingSecond.End();
 
-        var borderRect = rect;
+        var borderRect = inRect;
         borderRect.height -= listingStandard.CurHeight + listingSecond.CurHeight;
         borderRect.y += listingStandard.CurHeight + listingSecond.CurHeight;
         var scrollContentRect = borderRect;

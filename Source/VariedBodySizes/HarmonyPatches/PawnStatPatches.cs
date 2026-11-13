@@ -130,7 +130,7 @@ public static partial class HarmonyPatches
     [HarmonyPatch]
     public static class CompHasGatherableBodyResource_ResourceAmountPatch
     {
-        private static IEnumerable<MethodBase> TargetMethods()
+        public static IEnumerable<MethodBase> TargetMethods()
         {
             foreach (var subClassType in typeof(CompHasGatherableBodyResource).AllSubclassesNonAbstract())
             {

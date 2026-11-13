@@ -66,4 +66,4 @@ Since modding is just a hobby for me I expect no donations to keep modding. If y
 
  
 
-[![Image](https://img.shields.io/github/v/release/emipa606/VariedBodySizes?label=latest%20version&style=plastic&labelColor=0070cd&color=white)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2863019550) | tags: scale options., customization, pawn size
+[![Image](https://img.shields.io/github/v/release/emipa606/VariedBodySizes?label=latest%20version&style=plastic&labelColor=0070cd&color=white)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2863019550) | customization, pawn size, scale options.

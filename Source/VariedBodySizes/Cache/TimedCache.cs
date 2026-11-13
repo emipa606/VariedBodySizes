@@ -1,11 +1,12 @@
+using System.Threading;
+
 namespace VariedBodySizes;
 
 public class TimedCache<T>(int expiryTime)
 {
     private readonly Dictionary<int, CacheEntry<T>> internalCache = new();
 
-    // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
-    private readonly object sync = new();
+    private readonly Lock sync = new();
 
     public void Set(Pawn pawn, T value)
     {
